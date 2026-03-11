@@ -14,3 +14,14 @@ class ExtractionResult(BaseModel):
     confidence: Optional[str]
     needsClarification: Optional[bool]
     clarificationQuestion: Optional[str]
+
+class ErrorResponse(BaseModel):
+    errorCode: str
+    errorMessage: str   
+
+
+class AppError(Exception):
+    def __init__(self, errorCode: str, errorMessage: str):
+        super().__init__(errorMessage)
+        self.errorCode = errorCode
+        self.errorMessage = errorMessage

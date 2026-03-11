@@ -16,7 +16,7 @@ class MerchantApiClient:
 
     def search(self, country_code: str, id_type: str, id_value: str):
         response = requests.get(
-            f"http://localhost:8080/locations/matches",
+            f"http://localhost:8081/locations/matches",
             params={
                 "country_code": country_code,
                 "id_type": id_type,
@@ -26,6 +26,7 @@ class MerchantApiClient:
         )
         logger.info("Mercahnt API Response: %s", response)
         if response.status_code == 404:
+            logger.error("Merchant not found for country_code=%s, id_type=%s, id_value=%s", country_code, id_type, id_value)
             return None
         response.raise_for_status()
         return response.json()

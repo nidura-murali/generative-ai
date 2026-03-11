@@ -1,5 +1,6 @@
 from groq import Groq
 import logging
+from schemas import AppError
 class GroqLLMClient:
     def __init__(self):
         self.client = Groq(api_key="your key")
@@ -17,4 +18,5 @@ class GroqLLMClient:
             return response.choices[0].message.content
         except Exception as e:
          logging.error("Unexpected LLM failure: %s", str(e))
-         raise    
+         errorMessage = "Unexpected LLM failure:"+ str(e)
+         raise AppError("500",errorMessage)
