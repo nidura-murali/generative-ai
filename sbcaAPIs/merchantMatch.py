@@ -16,7 +16,7 @@ class MerchantApiClient:
 
     def search(self, country_code: str, id_type: str, id_value: str):
         response = requests.get(
-            f"http://localhost:8081/locations/matches",
+            f"{self.base_url}/locations/matches",
             params={
                 "country_code": country_code,
                 "id_type": id_type,

@@ -12,3 +12,4 @@ ENV/
 pip-log.txt
 merchant_agent_project.iml
 .idea
+.vscode

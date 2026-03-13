@@ -1,19 +1,20 @@
-from fastapi import FastAPI
-from agent import MerchantSearchAgent
-from merchant_api import MerchantApiClient
-from metrics_api import MetricsApiClient
-from schemas import AppError, ErrorResponse
+from fastapi import FastAPI, Depends
+from agents.merchantSearchAgent import MerchantSearchAgent
+
+from sbcaAPIs.merchantMatch import MerchantApiClient
+from sbcaAPIs.merchantsMetrics import MetricsApiClient
+from utils.schemas import AppError, ErrorResponse
 from fastapi.responses import JSONResponse
+from core.settings import get_settings
 
 app = FastAPI()
-
-merchant_api = MerchantApiClient("https://your-api-base-url")
-metrics_api = MetricsApiClient("http://localhost:8081")
-agent = MerchantSearchAgent(merchant_api, metrics_api)
+settings = get_settings()
+merchant_api = MerchantApiClient(settings.SBCA_HOST)
+merchantSearchAgent = MerchantSearchAgent(merchant_api)
 
 @app.post("/locate-merchant")
 def chat(query: str):
-    return {"response": agent.handle_query(query)}
+    return {"response": merchantSearchAgent.handle_merchant_search(query)}
     
 @app.exception_handler(AppError)
 async def app_error_handler(statusCode : str, errorMessage : str):

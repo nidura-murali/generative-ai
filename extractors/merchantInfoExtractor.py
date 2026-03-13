@@ -1,6 +1,6 @@
 import json
-from schemas import ExtractionResult
-from groq_client import GroqLLMClient
+from utils.schemas import ExtractionResult
+from llms.groqClient import GroqLLMClient
 import logging
 
 
@@ -30,9 +30,9 @@ Rules:
 - Respond ONLY in valid JSON
 '''
 
-def extract_entities(user_input: str) -> ExtractionResult:
-    llm = GroqLLMClient()
-    response = llm.generate(
+def extract_merchant_info(user_input: str) -> ExtractionResult:
+    grok_llm = GroqLLMClient()
+    response = grok_llm.generate(
         SYSTEM_PROMPT,
         f'User input: "{user_input}"'
     )
