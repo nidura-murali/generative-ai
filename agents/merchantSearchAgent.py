@@ -21,7 +21,7 @@ class MerchantSearchAgent:
         if extraction.needsClarification:
             return extraction.clarificationQuestion
 
-        merchants = self.merchant_api.search(
+        merchants = self.merchant_api.searchMerchant(
             extraction.countryCode,
             extraction.idType.value,
             extraction.idValue
@@ -30,29 +30,11 @@ class MerchantSearchAgent:
         logger.info("Merchant API Search Result: %s", merchants)
 
         if not merchants:
-            logger.error("Error while Merchant API Search Result: %s", merchants)
+            logger.error("Could not find merchants for the search %s", merchants)
             return build_not_found_response(
                 extraction.idType.value,
                 extraction.idValue,
                 extraction.countryCode
             )
         logger.info("Merchant API Search Result First Merchant: %s", merchants[0])
-        # TODO: To be moved to seperate agent
-        # try:
-        #     payload = build_success_response(merchants[0])  
-        # except ValueError as e:
-        #     logger.error("Response is not valid JSON. Body: %s", build_success_response(merchants[0]).text[:500])
-        #     raise
-
-        # location_id = (
-        #     payload.get("response", {}).get("locationId") or payload.get("locationId")
-        # )
-
-        # if not location_id:
-        #     logger.warning("locationId missing in response JSON. Body: %s", str(payload)[:500])
-        #     raise ValueError("locationId missing in response JSON")
-
-        # logger.info("locationId = %s", location_id)
-        # metricsResponse = self.metrics_api.getMonthlyRSAMetrics(location_id)
-        # logger.info("Metrics API Response: %s", metricsResponse)
-        return build_success_response(merchants[0])
+        return merchants

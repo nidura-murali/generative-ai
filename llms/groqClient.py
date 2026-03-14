@@ -3,7 +3,7 @@ import logging
 from utils.schemas import AppError
 class GroqLLMClient:
     def __init__(self):
-        self.client = Groq(api_key="You key")
+        self.client = Groq(api_key="your key")
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         try:

@@ -10,7 +10,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 class MetricsApiClient:
     
-    def __init__(self, base_url="http://localhost:8081", timeout=5):
+    def __init__(self, base_url, timeout=5):
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
 
@@ -21,5 +21,11 @@ class MetricsApiClient:
             params={"metrics_frequency": "MONTHLY", "has_consent": "true"},
             timeout=self.timeout
         )
+        if resp.status_code==404:
+            logging.error("Metrics information not found")
+            return None
+        if resp.status_code==500:
+            logging.error("Error while calling SBCA Metrics API")
+            return None
         resp.raise_for_status()
         return resp.json()
